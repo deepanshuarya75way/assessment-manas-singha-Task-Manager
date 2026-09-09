@@ -1,0 +1,120 @@
+@baseUrl = http://localhost:3000/api
+
+### =====================================================
+### ADMIN AUTH
+### =====================================================
+
+### 1. Create Demo Admin
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Demo Admin",
+  "email": "admin@taskmanager.com",
+  "password": "Admin@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=68",
+  "adminJoinCode": "YOUR_ADMIN_JOIN_CODE"
+}
+
+###
+
+### 2. Admin Login
+# IMPORTANT:
+# Run this request first before testing admin-only endpoints.
+# The response sets the HTTP-only access_token cookie.
+POST {{baseUrl}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "admin@taskmanager.com",
+  "password": "Admin@123"
+}
+
+###
+
+### 3. Admin Profile
+GET {{baseUrl}}/auth/user-profile
+
+###
+
+### 4. Update Admin Profile
+PUT {{baseUrl}}/auth/update-profile
+Content-Type: application/json
+
+{
+  "name": "Demo Admin Updated",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=68"
+}
+
+###
+
+
+### =====================================================
+### NORMAL USER AUTH
+### =====================================================
+
+### 5. Create Demo User
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Demo User",
+  "email": "user@taskmanager.com",
+  "password": "User@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=12"
+}
+
+###
+
+### 6. User Login
+# Run this when you want to test user-protected endpoints.
+POST {{baseUrl}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "user@taskmanager.com",
+  "password": "User@123"
+}
+
+###
+
+### 7. User Profile
+GET {{baseUrl}}/auth/user-profile
+
+###
+
+### 8. Update User Profile
+PUT {{baseUrl}}/auth/update-profile
+Content-Type: application/json
+
+{
+  "name": "Demo User Updated",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=12"
+}
+
+###
+
+
+### =====================================================
+### IMAGE UPLOAD
+### =====================================================
+
+### 9. Upload Profile Image
+# Replace the file path with an actual image on your PC.
+# Example:
+# C:\Users\HP\Desktop\test-image.jpg
+#
+# NOTE:
+# REST Client's multipart/file syntax may depend on the
+# extension/version being used.
+POST {{baseUrl}}/auth/upload-image
+Content-Type: multipart/form-data; boundary=----TaskManagerBoundary
+
+------TaskManagerBoundary
+Content-Disposition: form-data; name="image"; filename="profile.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\HP\Desktop\abc.jpg
+------TaskManagerBoundary--
+
+###

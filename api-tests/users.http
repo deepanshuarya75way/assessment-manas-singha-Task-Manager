@@ -1,0 +1,147 @@
+@baseUrl = http://localhost:3000/api
+
+### =====================================================
+### CREATE 10 DEMO USERS
+### =====================================================
+
+### User 1
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Rahul Sharma",
+  "email": "rahul.sharma@taskmanager.com",
+  "password": "Rahul@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=12"
+}
+
+###
+
+### User 2
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Priya Singh",
+  "email": "priya.singh@taskmanager.com",
+  "password": "Priya@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=47"
+}
+
+###
+
+### User 3
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Aman Kumar",
+  "email": "aman.kumar@taskmanager.com",
+  "password": "Aman@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=33"
+}
+
+###
+
+### User 4
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Sneha Verma",
+  "email": "sneha.verma@taskmanager.com",
+  "password": "Sneha@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=44"
+}
+
+###
+
+### User 5
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Arjun Mehta",
+  "email": "arjun.mehta@taskmanager.com",
+  "password": "Arjun@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=15"
+}
+
+###
+
+### User 6
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Neha Gupta",
+  "email": "neha.gupta@taskmanager.com",
+  "password": "Neha@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=49"
+}
+
+###
+
+### User 7
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Rohit Yadav",
+  "email": "rohit.yadav@taskmanager.com",
+  "password": "Rohit@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=11"
+}
+
+###
+
+### User 8
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Ananya Das",
+  "email": "ananya.das@taskmanager.com",
+  "password": "Ananya@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=45"
+}
+
+###
+
+### User 9
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Vikash Raj",
+  "email": "vikash.raj@taskmanager.com",
+  "password": "Vikash@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=68"
+}
+
+###
+
+### User 10
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "name": "Kavya Patel",
+  "email": "kavya.patel@taskmanager.com",
+  "password": "Kavya@123",
+  "profileImageUrl": "https://i.pravatar.cc/150?img=32"
+}
+
+### 11. Get All Users
+# ADMIN LOGIN MUST BE ACTIVE
+GET {{baseUrl}}/users/get-users
+
+###
+
+### 12. Get User By ID
+# Replace with an actual MongoDB User ID
+@userId = 6aa125d5c2cd8b980e59cbb1
+
+GET {{baseUrl}}/users/{{userId}}
+
+###

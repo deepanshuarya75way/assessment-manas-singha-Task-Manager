@@ -1,0 +1,263 @@
+@baseUrl = http://localhost:3000/api
+
+# Replace these after running /users/get-users
+@user1Id = 6aa125d5c2cd8b980e59cbb1
+@user2Id = 6aa125d9c2cd8b980e59cbb2
+@user3Id = 6aa125dcc2cd8b980e59cbb3
+
+# Replace after creating a task
+@taskId = 6aa12a2dc2cd8b980e59cbbd
+
+
+### =====================================================
+### TASK CREATION
+### =====================================================
+
+### 1. Create Task - High Priority
+# ADMIN LOGIN MUST BE ACTIVE
+POST {{baseUrl}}/tasks/create
+Content-Type: application/json
+
+{
+  "title": "Build Authentication Module",
+  "description": "Implement login, signup and JWT authentication.",
+  "priority": "High",
+  "dueDate": "2026-09-20",
+  "assignedTo": [
+    "{{user1Id}}",
+    "{{user2Id}}"
+  ],
+  "attachments": [],
+  "todoChecklist": [
+    {
+      "text": "Create signup API",
+      "completed": false
+    },
+    {
+      "text": "Create signin API",
+      "completed": false
+    },
+    {
+      "text": "Implement JWT authentication",
+      "completed": false
+    }
+  ]
+}
+
+###
+
+### 2. Create Task - Medium Priority
+POST {{baseUrl}}/tasks/create
+Content-Type: application/json
+
+{
+  "title": "Design Dashboard",
+  "description": "Create responsive admin dashboard.",
+  "priority": "Medium",
+  "dueDate": "2026-09-25",
+  "assignedTo": [
+    "{{user3Id}}"
+  ],
+  "attachments": [],
+  "todoChecklist": [
+    {
+      "text": "Create dashboard layout",
+      "completed": false
+    },
+    {
+      "text": "Add statistics cards",
+      "completed": false
+    },
+    {
+      "text": "Add charts",
+      "completed": false
+    }
+  ]
+}
+
+###
+
+### 3. Create Task - Low Priority
+POST {{baseUrl}}/tasks/create
+Content-Type: application/json
+
+{
+  "title": "Update Documentation",
+  "description": "Update project documentation.",
+  "priority": "Low",
+  "dueDate": "2026-10-01",
+  "assignedTo": [
+    "{{user1Id}}"
+  ],
+  "attachments": [],
+  "todoChecklist": [
+    {
+      "text": "Update README",
+      "completed": false
+    }
+  ]
+}
+
+
+### =====================================================
+### GET TASKS
+### =====================================================
+
+### 4. Get All Assigned Tasks
+GET {{baseUrl}}/tasks/
+
+###
+
+### 5. Get Pending Tasks
+GET {{baseUrl}}/tasks/?status=Pending
+
+###
+
+### 6. Get In Progress Tasks
+GET {{baseUrl}}/tasks/?status=In%20Progress
+
+###
+
+### 7. Get Completed Tasks
+GET {{baseUrl}}/tasks/?status=Completed
+
+
+### =====================================================
+### TASK BY ID
+### =====================================================
+
+### 8. Get Task By ID
+GET {{baseUrl}}/tasks/{{taskId}}
+
+
+### =====================================================
+### UPDATE TASK
+### =====================================================
+
+### 9. Update Task
+PUT {{baseUrl}}/tasks/{{taskId}}
+Content-Type: application/json
+
+{
+  "title": "Build Authentication Module - Updated",
+  "description": "Updated authentication implementation.",
+  "priority": "High",
+  "dueDate": "2026-09-22",
+  "assignedTo": [
+    "{{user1Id}}",
+    "{{user2Id}}"
+  ],
+  "todoChecklist": [
+    {
+      "text": "Create signup API",
+      "completed": true
+    },
+    {
+      "text": "Create signin API",
+      "completed": false
+    },
+    {
+      "text": "Implement JWT authentication",
+      "completed": false
+    }
+  ],
+  "attachments": []
+}
+
+
+### =====================================================
+### UPDATE TASK STATUS
+### =====================================================
+
+### 10. Change Task Status -> In Progress
+PUT {{baseUrl}}/tasks/{{taskId}}/status
+Content-Type: application/json
+
+{
+  "status": "In Progress"
+}
+
+###
+
+### 11. Change Task Status -> Completed
+PUT {{baseUrl}}/tasks/{{taskId}}/status
+Content-Type: application/json
+
+{
+  "status": "Completed"
+}
+
+
+### =====================================================
+### UPDATE TODO CHECKLIST
+### =====================================================
+
+### 12. Update Checklist - Partial
+PUT {{baseUrl}}/tasks/{{taskId}}/todo
+Content-Type: application/json
+
+{
+  "todoChecklist": [
+    {
+      "text": "Create signup API",
+      "completed": true
+    },
+    {
+      "text": "Create signin API",
+      "completed": true
+    },
+    {
+      "text": "Implement JWT authentication",
+      "completed": false
+    }
+  ]
+}
+
+###
+
+### 13. Update Checklist - Complete
+PUT {{baseUrl}}/tasks/{{taskId}}/todo
+Content-Type: application/json
+
+{
+  "todoChecklist": [
+    {
+      "text": "Create signup API",
+      "completed": true
+    },
+    {
+      "text": "Create signin API",
+      "completed": true
+    },
+    {
+      "text": "Implement JWT authentication",
+      "completed": true
+    }
+  ]
+}
+
+
+### =====================================================
+### DASHBOARDS
+### =====================================================
+
+### 14. Admin Dashboard Data
+# ADMIN LOGIN MUST BE ACTIVE
+GET {{baseUrl}}/tasks/dashboard-data
+
+###
+
+### 15. User Dashboard Data
+# USER LOGIN MUST BE ACTIVE
+GET {{baseUrl}}/tasks/user-dashboard-data
+
+
+### =====================================================
+### DELETE TASK
+### =====================================================
+
+### 16. Delete Task
+# ADMIN LOGIN MUST BE ACTIVE
+DELETE {{baseUrl}}/tasks/{{taskId}}
+
+###
