@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom"
 import RecentTasks from "../../components/RecentTasks"
 import CustomPieChart from "../../components/CustomPieChart"
 import CustomBarChart from "../../components/CustomBarChart"
+import socket from '../../services/socket'
+// import { selectStackedCartesianItemsSettings } from "recharts/types/state/selectors/axisSelectors"
+ 
+
 
 const COLORS = ["#FF6384", "#36A2EB", "#FFCE56"]
 
@@ -14,6 +18,24 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   const { currentUser } = useSelector((state) => state.user)
+
+
+  useEffect(()=>{
+    const handleTaskCreated = (task)=>{
+    console.log('new task received:',task)
+  }
+  const handleTaksUpdated = (task)=>{
+    console.log('new task received:',task)
+  }
+  socket.on('task:created',handleTaskCreated)
+  socket.on('task:updated',handleTaksUpdated)
+
+  return ()=>{
+    socket.off('task:created',handleTaskCreated)
+    socket.off('task:updated',handleTaskCreated)
+  }
+  },[])
+  
 
   const [dashboardData, setDashboardData] = useState([])
   const [pieChartData, setPieChartData] = useState([])

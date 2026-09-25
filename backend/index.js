@@ -9,6 +9,10 @@ import userRoutes from "./routes/user.route.js"
 import taskRoutes from "./routes/task.route.js"
 import reportRoutes from "./routes/report.route.js"
 import { fileURLToPath } from "url"
+import http from 'http'
+import {Server} from 'socket.io'
+import { initSocket } from "./utils/sokcet.js";
+
 
 dotenv.config();
 
@@ -40,9 +44,67 @@ app.use(express.json());
 
 app.use(cookieParser())
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000!");
-});
+
+//socket io setup
+const server = http.createServer(app)
+
+const io = new Server(server,{
+  cors:{
+    origin:process.env.FRONT_END_URL,
+    credentials:true,
+  },
+})
+
+initSocket(io)
+io.use((socket,next)=>{
+  try {
+    const cookieHeader = socket.handshake.headers.cookie
+
+    if(!cookieHeader){
+      return next(new Error('Unauthorized'))
+    }
+
+    const token = cookieHeader?.split("; ").find((cookie)=>{
+      cookie.startsWith("access_token=").split("=")[1]
+    })
+    if(!token){
+      return next(new Error("Unauthorized"))
+    }
+    //decoding the token 
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+      (err,user)=>{
+        return next(new Error('Unauthorized'))
+      }
+    )
+    socket.user = user
+    //socket.role = decoded.role
+    next()
+  } catch (error) {
+    next(new Error("Unauthorized!"))
+  }
+})
+
+io.on("connection",(socket)=>{
+  console.log("User connected: ",socket.user)
+
+  socket.join(`user: ${socket.user._id}`)
+  if(socket.user.role==='admin'){
+    socket.join("admins")
+  }
+
+  console.log('socket connected!',socket.id);
+  socket.on("disconnect",()=>{
+    console.log("user disconnected!",socket.user._id)
+  })
+})
+
+
+server.listen(3000,()=>{
+  console.log("Server running on port 3000")
+})
+
 
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)

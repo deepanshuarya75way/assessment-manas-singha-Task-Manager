@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import Task from "../models/task.model.js"
 import { errorHandler } from "../utils/error.js"
-
+import { getIO } from "../utils/sokcet.js"
 export const createTask = async (req, res, next) => {
   try {
     const {
@@ -29,6 +29,17 @@ export const createTask = async (req, res, next) => {
       createdBy: req.user.id,
     })
 
+    //socket io code here 
+    const io = getIO()
+
+    io.to(`user:${task.assignedTo}`.emit(
+      "task:created",
+       task
+    ))
+    io.to("admins").emit(
+      "task:created",
+       task
+    )
     res.status(201).json({ message: "Task created successfully", task })
   } catch (error) {
     next(error)
@@ -195,11 +206,42 @@ export const updateTaskStatus = async (req, res, next) => {
 
     task.status = req.body.status || task.status
 
+
+    //previously assigned to 
+    const prevAssignedTo = task.assignedTo.map((userId)=>userId.toString())
+
     if (task.status === "Completed") {
       task.todoChecklist.forEach((item) => (item.completed = true))
     }
 
     await task.save()
+    //socket io implementation - live updates
+    const io = getIO()
+    //tehse are the currently asssigned users
+    task.assignedTo.forEach((userId)=>{
+      io.to(`user:${task.assignedTo}`.emit(
+      "task: updated",
+      task
+    ))
+    })
+    //notify the users who were removed from the assigned Task
+    prevAssignedTo.forEach((userId)=>{
+      const stillAssigned = task.assignedTo.some(
+        (newUserId)=>newUserId.toString() === userId
+      )
+
+      if(!stillAssigned){
+        io.to(`user: ${userId}`.emit(
+          "taks:updated",
+      task
+        ))
+      }
+    })
+    //notifying  the admins
+    io.to("admins").emit(
+      "taks:updated",
+      task
+    )
 
     res.status(200).json({ message: "Task status updated", task })
   } catch (error) {
